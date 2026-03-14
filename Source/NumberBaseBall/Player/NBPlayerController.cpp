@@ -5,6 +5,7 @@
 #include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
 #include "Game/NBGameModeBase.h"
+#include "NBPlayerState.h"
 
 void ANBPlayerController::BeginPlay()
 {
@@ -36,7 +37,13 @@ void ANBPlayerController::SetChatMessageString(const FString& InChatMessageStrin
 
 	if (IsLocalController() == true)
 	{
-		ServerRPCPrintChatMessageString(InChatMessageString);
+		ANBPlayerState* NBPS = GetPlayerState<ANBPlayerState>();
+		if (IsValid(NBPS) == true)
+		{
+			FString CombinedMessageString = NBPS->GetPlayerInfoString() + TEXT(" : ") + InChatMessageString;
+
+			ServerRPCPrintChatMessageString(CombinedMessageString);
+		}
 	}
 }
 

@@ -2,21 +2,28 @@
 #include "NBGameStateBase.h"
 #include "Player/NBPlayerController.h"
 #include "EngineUtils.h"
+#include "Player/NBPlayerState.h"
 
 void ANBGameModeBase::OnPostLogin(AController* NewPlayer)
 {
 	Super::OnPostLogin(NewPlayer);
 
-	ANBGameStateBase* NBGameStateBase = GetGameState<ANBGameStateBase>();
-	if (IsValid(NBGameStateBase) == true)
-	{
-		NBGameStateBase->MulticastRPCBroadcastLoginMessage(TEXT("XXXXXXX"));
-	}
-
 	ANBPlayerController* NBPlayerController = Cast<ANBPlayerController>(NewPlayer);
 	if (IsValid(NBPlayerController) == true)
 	{
 		AllPlayerControllers.Add(NBPlayerController);
+
+		ANBPlayerState* NBPS = NBPlayerController->GetPlayerState<ANBPlayerState>();
+		if (IsValid(NBPS) == true)
+		{
+			NBPS->PlayerNameString = TEXT("Player") + FString::FromInt(AllPlayerControllers.Num());
+		}
+
+		ANBGameStateBase* NBGameStateBase = GetGameState<ANBGameStateBase>();
+		if (IsValid(NBGameStateBase) == true)
+		{
+			NBGameStateBase->MulticastRPCBroadcastLoginMessage(NBPS->PlayerNameString);
+		}
 	}
 }
 
@@ -122,6 +129,9 @@ void ANBGameModeBase::PrintChatMessageString(ANBPlayerController* InChattingPlay
 	if (IsGuessNumberString(GuessNumberString) == true)
 	{
 		FString JudgeResultString = JudgeResult(SecretNumberString, GuessNumberString);
+
+		IncreaseGuessCount(InChattingPlayerController);
+
 		for (TActorIterator<ANBPlayerController> It(GetWorld()); It; ++It)
 		{
 			ANBPlayerController* NBPlayerController = *It;
@@ -142,5 +152,14 @@ void ANBGameModeBase::PrintChatMessageString(ANBPlayerController* InChattingPlay
 				NBPlayerController->ClientRPCPrintChatMessageString(InChatMessageString);
 			}
 		}
+	}
+}
+
+void ANBGameModeBase::IncreaseGuessCount(ANBPlayerController* InChattingPlayerController)
+{
+	ANBPlayerState* NBPS = InChattingPlayerController->GetPlayerState<ANBPlayerState>();
+	if (IsValid(NBPS) == true)
+	{
+		NBPS->CurrentGuessCount++;
 	}
 }

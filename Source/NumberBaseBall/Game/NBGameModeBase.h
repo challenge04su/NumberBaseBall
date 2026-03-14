@@ -24,6 +24,7 @@ public:
 
 	void PrintChatMessageString(ANBPlayerController* InChattingPlayerController, const FString& InChatMessageString);
 
+	void IncreaseGuessCount(ANBPlayerController* InChattingPlayerController);
 protected:
 	FString SecretNumberString; 
 
