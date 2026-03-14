@@ -23,4 +23,5 @@ protected:
 public:
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UEditableTextBox> EditableTextBox_ChatInput;
+
 };

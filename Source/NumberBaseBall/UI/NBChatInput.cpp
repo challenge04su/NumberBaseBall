@@ -39,3 +39,4 @@ void UNBChatInput::OnChatInputTextCommitted(const FText& Text, ETextCommit::Type
 		}
 	}
 }
+
