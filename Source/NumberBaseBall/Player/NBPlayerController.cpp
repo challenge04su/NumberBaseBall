@@ -48,8 +48,6 @@ void ANBPlayerController::SetChatMessageString(const FString& InChatMessageStrin
 {
 	ChatMessageString = InChatMessageString;
 
-	//PrintChatMessageString(ChatMessageString);
-
 	if (IsLocalController() == true)
 	{
 		ANBPlayerState* NBPS = GetPlayerState<ANBPlayerState>();
@@ -64,11 +62,6 @@ void ANBPlayerController::SetChatMessageString(const FString& InChatMessageStrin
 
 void ANBPlayerController::PrintChatMessageString(const FString& InChatMessageString)
 {
-	//UKismetSystemLibrary::PrintString(this, ChatMessageString, true, true, FLinearColor::Yellow, 10.0f);
-
-	/*FString NetModeString = NBFunctionLibrary::GetNetModeString(this);
-	FString CombinedMessageString = FString::Printf(TEXT("%s: %s"), *NetModeString, *InChatMessageString);
-	NBFunctionLibrary::MyPrintString(this, CombinedMessageString, 10.f);*/
 	NBFunctionLibrary::MyPrintString(this, InChatMessageString, 10.f);
 }
 
